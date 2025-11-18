@@ -1,4 +1,4 @@
-## Regression Types
+## Chapter 1: Regression Types
 
 `Linear Regression` - A type of regression technique that is used when your target (aka output) is a numeric value.
 
@@ -9,6 +9,13 @@
 > Ex. Is this food more for vegans or meat eaters?
 
 `Hold out validation` - The process of splitting a dataset into a certain ratio of training and testing dataset using Scikit Learn's `train_test_split()` method/function is called:
+
+
+## Chapter 3: Linear Regression
+
+`Basic Linear Regression` - 
+
+`Polynomial Regression` - 
 
 
 
