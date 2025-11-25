@@ -134,3 +134,208 @@ Where:
 `Supervised Learning` - Learning from labeled data to map to known outputs. Learns the relationship between inputs and outputs in order to predict new, unseen data.
 
 `Unsupervised Learning` - Learning from unlabeled where the algorithm discovers patterns on its own.
+
+## Chapter 4: Logistic Regression
+
+### Key Terminology
+
+`Logistic Regression` - A linear-based classification method used to predict binary categories (e.g., white or not white, spam or not spam). Despite the name "regression," it's actually a classification technique.
+
+`Binary Classification` - Prediction between two categories (0 or 1, True or False, Yes or No). Example: predicting if a pumpkin is white or orange.
+
+`Multinomial Classification` - Classification involving more than two categories. Example: "Orange, White, and Striped" pumpkins.
+
+`Ordinal Classification` - Classification with ordered categories that follow a logical sequence. Example: pumpkin sizes (mini, small, medium, large, xl, xxl).
+
+`Sigmoid Function (Logistic Function)` - An S-shaped curve that maps any input value to a value between 0 and 1. Used to convert linear regression output into probabilities for classification.
+
+**Formula:** `σ(x) = 1 / (1 + e^(-x))`
+
+**Properties:**
+- Output range: 0 to 1
+- S-shaped curve
+- Midpoint at x = 0 (where output = 0.5)
+- Used to determine class: if σ(x) > 0.5 → class 1, otherwise → class 0
+
+`Maximum Likelihood` - The principle used by logistic regression to find the best-fitting model by maximizing the probability of observing the actual data.
+
+### Feature Encoding
+
+`Feature Encoding` - The process of converting categorical (text) data into numerical format that machine learning algorithms can process.
+
+`Ordinal Encoder` - Encodes ordinal variables (categories with logical ordering) by assigning sequential numbers based on the order.
+
+**Example:**
+```python
+Item Size: ['sml', 'med', 'med-lge', 'lge', 'xlge', 'jbo', 'exjbo']
+Encoded as: [0, 1, 2, 3, 4, 5, 6]
+```
+
+`One-Hot Encoder (Categorical Encoder)` - Encodes nominal variables (categories without logical ordering) by creating binary columns for each category.
+
+**Example:**
+```
+Variety: ['Pie Type', 'Carving', 'Mini']
+
+One-Hot Encoded:
+Variety_Pie Type: [1, 0, 0]
+Variety_Carving:  [0, 1, 0]
+Variety_Mini:     [0, 0, 1]
+```
+
+`Label Encoder` - Encodes target labels into values between 0 and n_classes-1.
+
+**Example:**
+```
+Color: ['ORANGE', 'WHITE', 'ORANGE', 'WHITE']
+Encoded: [0, 1, 0, 1]
+```
+
+`ColumnTransformer` - A scikit-learn utility that combines multiple encoders and applies them to appropriate columns in a single step.
+
+### Model Evaluation Metrics
+
+`Confusion Matrix` - A table showing the model's true vs. false positives and negatives, used to evaluate classification accuracy.
+
+**Structure:**
+```
+                Predicted
+                0       1
+Actual    0    TN      FP
+          1    FN      TP
+```
+
+Where:
+- **TN (True Negative)**: Correctly predicted as class 0
+- **FP (False Positive)**: Incorrectly predicted as class 1 (Type I error)
+- **FN (False Negative)**: Incorrectly predicted as class 0 (Type II error)
+- **TP (True Positive)**: Correctly predicted as class 1
+
+**Example:**
+```
+Confusion Matrix:
+[[162,   4],    # 162 true negatives, 4 false positives
+ [ 11,  22]]    # 11 false negatives, 22 true positives
+```
+
+`Precision` - The fraction of correct positive predictions out of all positive predictions.
+
+**Formula:** `Precision = TP / (TP + FP)`
+
+**Example:** `Precision = 22 / (22 + 4) = 0.846`
+
+**Interpretation:**
+- Answers: "Of all items predicted as positive, how many are actually positive?"
+- High precision = Few false positives
+- Important when false positives are costly
+
+`Recall (Sensitivity, True Positive Rate)` - The fraction of actual positives that were correctly identified.
+
+**Formula:** `Recall = TP / (TP + FN)`
+
+**Example:** `Recall = 22 / (22 + 11) = 0.667`
+
+**Interpretation:**
+- Answers: "Of all actual positive items, how many did we correctly identify?"
+- High recall = Few false negatives
+- Important when false negatives are costly (e.g., disease detection)
+
+`F1-Score` - The harmonic mean of precision and recall, providing a single score that balances both metrics.
+
+**Formula:** `F1 = 2 × (Precision × Recall) / (Precision + Recall)`
+
+**Example:** `F1 = 2 × (0.846 × 0.667) / (0.846 + 0.667) = 0.746`
+
+**Interpretation:**
+- Range: 0 to 1
+- F1 = 1: Perfect precision and recall
+- F1 = 0: Worst possible score
+- Useful when you need balance between precision and recall
+
+`Accuracy` - The percentage of all predictions that were correct.
+
+**Formula:** `Accuracy = (TP + TN) / (TP + TN + FP + FN)`
+
+**Example:** `Accuracy = (22 + 162) / (22 + 162 + 4 + 11) = 0.925 (92.5%)`
+
+**Interpretation:**
+- Simple overall performance metric
+- Can be misleading with imbalanced datasets
+
+`Support` - The number of actual occurrences of each class in the dataset.
+
+**Example:**
+```
+Class 0 (Orange): 166 samples
+Class 1 (White): 33 samples
+```
+
+`Macro Average` - The unweighted mean of metrics for each class, treating all classes equally regardless of support.
+
+**Calculation:** `Macro Avg = (Metric_Class0 + Metric_Class1) / 2`
+
+`Weighted Average` - The mean of metrics for each class, weighted by the number of samples (support) in each class.
+
+**Calculation:** `Weighted Avg = (Metric_Class0 × Support0 + Metric_Class1 × Support1) / Total_Samples`
+
+### ROC Curve Analysis
+
+`ROC Curve (Receiver Operating Characteristic)` - A graph showing the trade-off between True Positive Rate (TPR) and False Positive Rate (FPR) at different classification thresholds.
+
+**Axes:**
+- X-axis: False Positive Rate (FPR) = FP / (FP + TN)
+- Y-axis: True Positive Rate (TPR) = TP / (TP + FN) = Recall
+
+**Interpretation:**
+- Diagonal line (y=x): Random classifier (baseline)
+- Curve above diagonal: Better than random
+- Steeper curve = Better model
+- More area under curve = Better performance
+
+`AUC (Area Under the Curve)` - A single number (0 to 1) representing the total area under the ROC curve.
+
+**Interpretation:**
+- **AUC = 1.0**: Perfect classifier
+- **AUC = 0.9-1.0**: Excellent model
+- **AUC = 0.8-0.9**: Good model
+- **AUC = 0.7-0.8**: Fair model
+- **AUC = 0.5**: No discrimination (random classifier)
+- **AUC < 0.5**: Worse than random (model is inverted)
+
+**Example:** `AUC = 0.975` indicates an excellent model with 97.5% probability of correctly distinguishing between classes.
+
+### Key Differences: Linear vs. Logistic Regression
+
+| Aspect | Linear Regression | Logistic Regression |
+|--------|------------------|---------------------|
+| **Output Type** | Continuous values | Binary categories (0 or 1) |
+| **Use Case** | Predict quantities (price, temperature) | Predict classifications (yes/no, spam/not spam) |
+| **Output Range** | -∞ to +∞ | 0 to 1 (probabilities) |
+| **Function** | Linear equation: y = mx + b | Sigmoid function: σ(x) = 1/(1+e^(-x)) |
+| **Correlation** | Works better with correlated features | Features don't need to correlate |
+| **Evaluation** | R², MSE, RMSE | Precision, Recall, F1-score, AUC |
+
+### Data Requirements for Logistic Regression
+
+1. **More data is better** - Logistic regression gives more accurate results with larger datasets
+2. **Clean data required** - Remove null values and handle missing data properly
+3. **Features don't need to correlate** - Unlike linear regression, weak correlations are acceptable
+4. **Binary or categorical target** - Target variable must be categories, not continuous values
+
+### Example Use Cases
+
+**Binary Classification:**
+- Email: Spam or Not Spam
+- Medical: Disease Present or Not Present
+- Finance: Loan Default or Not Default
+- Pumpkin: White or Orange
+
+**Multinomial Classification:**
+- Pumpkin variety: Pie Type, Carving, or Mini
+- Animal type: Dog, Cat, or Bird
+- Product category: Electronics, Clothing, or Food
+
+**Ordinal Classification:**
+- Customer satisfaction: Poor, Fair, Good, Excellent
+- Education level: High School, Bachelor's, Master's, PhD
+- Pumpkin size: Small, Medium, Large, Extra Large
