@@ -152,6 +152,7 @@ Where:
 **Formula:** `σ(x) = 1 / (1 + e^(-x))`
 
 **Properties:**
+
 - Output range: 0 to 1
 - S-shaped curve
 - Midpoint at x = 0 (where output = 0.5)
@@ -166,6 +167,7 @@ Where:
 `Ordinal Encoder` - Encodes ordinal variables (categories with logical ordering) by assigning sequential numbers based on the order.
 
 **Example:**
+
 ```python
 Item Size: ['sml', 'med', 'med-lge', 'lge', 'xlge', 'jbo', 'exjbo']
 Encoded as: [0, 1, 2, 3, 4, 5, 6]
@@ -174,6 +176,7 @@ Encoded as: [0, 1, 2, 3, 4, 5, 6]
 `One-Hot Encoder (Categorical Encoder)` - Encodes nominal variables (categories without logical ordering) by creating binary columns for each category.
 
 **Example:**
+
 ```
 Variety: ['Pie Type', 'Carving', 'Mini']
 
@@ -186,6 +189,7 @@ Variety_Mini:     [0, 0, 1]
 `Label Encoder` - Encodes target labels into values between 0 and n_classes-1.
 
 **Example:**
+
 ```
 Color: ['ORANGE', 'WHITE', 'ORANGE', 'WHITE']
 Encoded: [0, 1, 0, 1]
@@ -198,6 +202,7 @@ Encoded: [0, 1, 0, 1]
 `Confusion Matrix` - A table showing the model's true vs. false positives and negatives, used to evaluate classification accuracy.
 
 **Structure:**
+
 ```
                 Predicted
                 0       1
@@ -206,12 +211,14 @@ Actual    0    TN      FP
 ```
 
 Where:
+
 - **TN (True Negative)**: Correctly predicted as class 0
 - **FP (False Positive)**: Incorrectly predicted as class 1 (Type I error)
 - **FN (False Negative)**: Incorrectly predicted as class 0 (Type II error)
 - **TP (True Positive)**: Correctly predicted as class 1
 
 **Example:**
+
 ```
 Confusion Matrix:
 [[162,   4],    # 162 true negatives, 4 false positives
@@ -225,6 +232,7 @@ Confusion Matrix:
 **Example:** `Precision = 22 / (22 + 4) = 0.846`
 
 **Interpretation:**
+
 - Answers: "Of all items predicted as positive, how many are actually positive?"
 - High precision = Few false positives
 - Important when false positives are costly
@@ -236,6 +244,7 @@ Confusion Matrix:
 **Example:** `Recall = 22 / (22 + 11) = 0.667`
 
 **Interpretation:**
+
 - Answers: "Of all actual positive items, how many did we correctly identify?"
 - High recall = Few false negatives
 - Important when false negatives are costly (e.g., disease detection)
@@ -247,6 +256,7 @@ Confusion Matrix:
 **Example:** `F1 = 2 × (0.846 × 0.667) / (0.846 + 0.667) = 0.746`
 
 **Interpretation:**
+
 - Range: 0 to 1
 - F1 = 1: Perfect precision and recall
 - F1 = 0: Worst possible score
@@ -259,12 +269,14 @@ Confusion Matrix:
 **Example:** `Accuracy = (22 + 162) / (22 + 162 + 4 + 11) = 0.925 (92.5%)`
 
 **Interpretation:**
+
 - Simple overall performance metric
 - Can be misleading with imbalanced datasets
 
 `Support` - The number of actual occurrences of each class in the dataset.
 
 **Example:**
+
 ```
 Class 0 (Orange): 166 samples
 Class 1 (White): 33 samples
@@ -283,10 +295,12 @@ Class 1 (White): 33 samples
 `ROC Curve (Receiver Operating Characteristic)` - A graph showing the trade-off between True Positive Rate (TPR) and False Positive Rate (FPR) at different classification thresholds.
 
 **Axes:**
+
 - X-axis: False Positive Rate (FPR) = FP / (FP + TN)
 - Y-axis: True Positive Rate (TPR) = TP / (TP + FN) = Recall
 
 **Interpretation:**
+
 - Diagonal line (y=x): Random classifier (baseline)
 - Curve above diagonal: Better than random
 - Steeper curve = Better model
@@ -295,6 +309,7 @@ Class 1 (White): 33 samples
 `AUC (Area Under the Curve)` - A single number (0 to 1) representing the total area under the ROC curve.
 
 **Interpretation:**
+
 - **AUC = 1.0**: Perfect classifier
 - **AUC = 0.9-1.0**: Excellent model
 - **AUC = 0.8-0.9**: Good model
@@ -306,14 +321,14 @@ Class 1 (White): 33 samples
 
 ### Key Differences: Linear vs. Logistic Regression
 
-| Aspect | Linear Regression | Logistic Regression |
-|--------|------------------|---------------------|
-| **Output Type** | Continuous values | Binary categories (0 or 1) |
-| **Use Case** | Predict quantities (price, temperature) | Predict classifications (yes/no, spam/not spam) |
-| **Output Range** | -∞ to +∞ | 0 to 1 (probabilities) |
-| **Function** | Linear equation: y = mx + b | Sigmoid function: σ(x) = 1/(1+e^(-x)) |
-| **Correlation** | Works better with correlated features | Features don't need to correlate |
-| **Evaluation** | R², MSE, RMSE | Precision, Recall, F1-score, AUC |
+| Aspect           | Linear Regression                       | Logistic Regression                             |
+| ---------------- | --------------------------------------- | ----------------------------------------------- |
+| **Output Type**  | Continuous values                       | Binary categories (0 or 1)                      |
+| **Use Case**     | Predict quantities (price, temperature) | Predict classifications (yes/no, spam/not spam) |
+| **Output Range** | -∞ to +∞                                | 0 to 1 (probabilities)                          |
+| **Function**     | Linear equation: y = mx + b             | Sigmoid function: σ(x) = 1/(1+e^(-x))           |
+| **Correlation**  | Works better with correlated features   | Features don't need to correlate                |
+| **Evaluation**   | R², MSE, RMSE                           | Precision, Recall, F1-score, AUC                |
 
 ### Data Requirements for Logistic Regression
 
@@ -325,17 +340,20 @@ Class 1 (White): 33 samples
 ### Example Use Cases
 
 **Binary Classification:**
+
 - Email: Spam or Not Spam
 - Medical: Disease Present or Not Present
 - Finance: Loan Default or Not Default
 - Pumpkin: White or Orange
 
 **Multinomial Classification:**
+
 - Pumpkin variety: Pie Type, Carving, or Mini
 - Animal type: Dog, Cat, or Bird
 - Product category: Electronics, Clothing, or Food
 
 **Ordinal Classification:**
+
 - Customer satisfaction: Poor, Fair, Good, Excellent
 - Education level: High School, Bachelor's, Master's, PhD
 - Pumpkin size: Small, Medium, Large, Extra Large
